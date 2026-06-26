@@ -12,7 +12,12 @@ export type Product = {
   description: string;
   material: string;
   details: string[];
+  /** Tallas disponibles (ej. anillos). Si no existe, la pieza es de talla única. */
+  sizes?: string[];
 };
+
+/** Tallas estándar de anillos ofrecidas (diámetro creciente). */
+export const RING_SIZES = ["6", "7", "8", "9", "10", "11", "12"];
 
 export const formatPrice = (value: number) =>
   new Intl.NumberFormat("es-CL", {
@@ -72,6 +77,7 @@ export const products: Product[] = [
       "Talla ajustable sin costo",
       "Incluye estuche y certificado de autenticidad",
     ],
+    sizes: RING_SIZES,
   },
   {
     id: "collar-luz-de-luna",
@@ -137,6 +143,7 @@ export const products: Product[] = [
       "Disponible en varias tallas",
       "Grabado interior opcional",
     ],
+    sizes: RING_SIZES,
   },
   {
     id: "collar-cadena-esencial",

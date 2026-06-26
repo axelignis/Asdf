@@ -10,7 +10,13 @@ import {
 } from "react";
 import { getProductById, type Product } from "@/data/products";
 
-export type CartLine = { product: Product; quantity: number };
+export type CartLine = {
+  /** Clave única de la línea (producto + talla). */
+  key: string;
+  product: Product;
+  size?: string;
+  quantity: number;
+};
 
 type CartContextValue = {
   items: CartLine[];
@@ -19,9 +25,9 @@ type CartContextValue = {
   isOpen: boolean;
   open: () => void;
   close: () => void;
-  add: (productId: string, quantity?: number) => void;
-  remove: (productId: string) => void;
-  setQuantity: (productId: string, quantity: number) => void;
+  add: (productId: string, quantity?: number, size?: string) => void;
+  remove: (key: string) => void;
+  setQuantity: (key: string, quantity: number) => void;
   clear: () => void;
 };
 
@@ -29,7 +35,10 @@ const CartContext = createContext<CartContextValue | null>(null);
 
 const STORAGE_KEY = "aurelia.cart";
 
-type StoredItem = { id: string; quantity: number };
+type StoredItem = { productId: string; size?: string; quantity: number };
+
+const lineKey = (productId: string, size?: string) =>
+  size ? `${productId}::${size}` : productId;
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [stored, setStored] = useState<StoredItem[]>([]);
@@ -57,16 +66,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, [stored, hydrated]);
 
-  const items = useMemo<CartLine[]>(
-    () =>
-      stored
-        .map(({ id, quantity }) => {
-          const product = getProductById(id);
-          return product ? { product, quantity } : null;
-        })
-        .filter((line): line is CartLine => line !== null),
-    [stored],
-  );
+  const items = useMemo<CartLine[]>(() => {
+    const lines: CartLine[] = [];
+    for (const { productId, size, quantity } of stored) {
+      const product = getProductById(productId);
+      if (product) {
+        lines.push({ key: lineKey(productId, size), product, size, quantity });
+      }
+    }
+    return lines;
+  }, [stored]);
 
   const count = useMemo(
     () => items.reduce((sum, l) => sum + l.quantity, 0),
@@ -85,28 +94,30 @@ export function CartProvider({ children }: { children: ReactNode }) {
     isOpen,
     open: () => setIsOpen(true),
     close: () => setIsOpen(false),
-    add: (productId, quantity = 1) => {
+    add: (productId, quantity = 1, size) => {
       setStored((prev) => {
-        const existing = prev.find((i) => i.id === productId);
+        const existing = prev.find(
+          (i) => i.productId === productId && i.size === size,
+        );
         if (existing) {
           return prev.map((i) =>
-            i.id === productId
-              ? { ...i, quantity: i.quantity + quantity }
-              : i,
+            i === existing ? { ...i, quantity: i.quantity + quantity } : i,
           );
         }
-        return [...prev, { id: productId, quantity }];
+        return [...prev, { productId, size, quantity }];
       });
       setIsOpen(true);
     },
-    remove: (productId) =>
-      setStored((prev) => prev.filter((i) => i.id !== productId)),
-    setQuantity: (productId, quantity) =>
+    remove: (key) =>
+      setStored((prev) =>
+        prev.filter((i) => lineKey(i.productId, i.size) !== key),
+      ),
+    setQuantity: (key, quantity) =>
       setStored((prev) =>
         quantity <= 0
-          ? prev.filter((i) => i.id !== productId)
+          ? prev.filter((i) => lineKey(i.productId, i.size) !== key)
           : prev.map((i) =>
-              i.id === productId ? { ...i, quantity } : i,
+              lineKey(i.productId, i.size) === key ? { ...i, quantity } : i,
             ),
       ),
     clear: () => setStored([]),
