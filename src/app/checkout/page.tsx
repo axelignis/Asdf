@@ -141,8 +141,8 @@ export default function CheckoutPage() {
           <div className="rounded-3xl border border-gold/15 bg-cream/40 p-7">
             <h2 className="font-serif text-2xl text-charcoal">Tu pedido</h2>
             <ul className="mt-5 divide-y divide-gold/10">
-              {items.map(({ product, quantity }) => (
-                <li key={product.id} className="flex gap-4 py-4">
+              {items.map(({ key, product, size, quantity }) => (
+                <li key={key} className="flex gap-4 py-4">
                   <div
                     className={`h-16 w-16 shrink-0 rounded-xl bg-gradient-to-br ${product.gradient}`}
                   />
@@ -150,13 +150,18 @@ export default function CheckoutPage() {
                     <span className="font-serif text-base leading-tight text-charcoal">
                       {product.name}
                     </span>
+                    {size && (
+                      <span className="text-xs uppercase tracking-wide text-stone">
+                        Talla {size}
+                      </span>
+                    )}
                     <span className="text-sm text-stone">
                       {formatPrice(product.price)}
                     </span>
                     <div className="mt-1 flex items-center gap-2 text-sm">
                       <button
                         type="button"
-                        onClick={() => setQuantity(product.id, quantity - 1)}
+                        onClick={() => setQuantity(key, quantity - 1)}
                         className="px-1 text-stone hover:text-charcoal"
                         aria-label="Disminuir"
                       >
@@ -165,7 +170,7 @@ export default function CheckoutPage() {
                       <span>{quantity}</span>
                       <button
                         type="button"
-                        onClick={() => setQuantity(product.id, quantity + 1)}
+                        onClick={() => setQuantity(key, quantity + 1)}
                         className="px-1 text-stone hover:text-charcoal"
                         aria-label="Aumentar"
                       >
@@ -173,7 +178,7 @@ export default function CheckoutPage() {
                       </button>
                       <button
                         type="button"
-                        onClick={() => remove(product.id)}
+                        onClick={() => remove(key)}
                         className="ml-auto text-xs text-stone/60 hover:text-charcoal"
                       >
                         Quitar

@@ -112,7 +112,7 @@ export default async function ProductoPage({
             {product.material}
           </p>
 
-          <ProductPurchase productId={product.id} />
+          <ProductPurchase productId={product.id} sizes={product.sizes} />
 
           <ul className="mt-10 space-y-3 border-t border-gold/15 pt-8">
             {product.details.map((detail) => (

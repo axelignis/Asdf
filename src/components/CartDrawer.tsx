@@ -63,8 +63,8 @@ export function CartDrawer() {
         ) : (
           <>
             <ul className="flex-1 divide-y divide-gold/10 overflow-y-auto px-6">
-              {items.map(({ product, quantity }) => (
-                <li key={product.id} className="flex gap-4 py-5">
+              {items.map(({ key, product, size, quantity }) => (
+                <li key={key} className="flex gap-4 py-5">
                   <Link
                     href={`/productos/${product.id}`}
                     onClick={close}
@@ -80,7 +80,7 @@ export function CartDrawer() {
                         {product.name}
                       </Link>
                       <button
-                        onClick={() => remove(product.id)}
+                        onClick={() => remove(key)}
                         aria-label={`Quitar ${product.name}`}
                         className="text-stone/60 transition-colors hover:text-charcoal"
                       >
@@ -89,13 +89,18 @@ export function CartDrawer() {
                         </svg>
                       </button>
                     </div>
+                    {size && (
+                      <p className="mt-0.5 text-xs uppercase tracking-wide text-stone">
+                        Talla {size}
+                      </p>
+                    )}
                     <p className="mt-1 text-sm text-stone">
                       {formatPrice(product.price)}
                     </p>
                     <div className="mt-auto flex items-center gap-3 pt-3">
                       <div className="flex items-center rounded-full border border-gold/30">
                         <button
-                          onClick={() => setQuantity(product.id, quantity - 1)}
+                          onClick={() => setQuantity(key, quantity - 1)}
                           aria-label="Disminuir cantidad"
                           className="px-3 py-1 text-charcoal transition-colors hover:text-gold"
                         >
@@ -103,7 +108,7 @@ export function CartDrawer() {
                         </button>
                         <span className="w-6 text-center text-sm">{quantity}</span>
                         <button
-                          onClick={() => setQuantity(product.id, quantity + 1)}
+                          onClick={() => setQuantity(key, quantity + 1)}
                           aria-label="Aumentar cantidad"
                           className="px-3 py-1 text-charcoal transition-colors hover:text-gold"
                         >

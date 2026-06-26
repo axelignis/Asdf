@@ -1,17 +1,35 @@
+import Link from "next/link";
 import { Logo } from "./Logo";
 
 const groups = [
   {
     title: "Tienda",
-    links: ["Anillos", "Collares", "Aros", "Pulseras", "Novedades"],
+    links: [
+      { label: "Anillos", href: "/productos?categoria=anillos" },
+      { label: "Collares", href: "/productos?categoria=collares" },
+      { label: "Aros", href: "/productos?categoria=aros" },
+      { label: "Pulseras", href: "/productos?categoria=pulseras" },
+      { label: "Novedades", href: "/productos" },
+    ],
   },
   {
     title: "Ayuda",
-    links: ["Guía de tallas", "Envíos", "Devoluciones", "Cuidado de joyas", "Contacto"],
+    links: [
+      { label: "Guía de tallas", href: "/guia-de-tallas" },
+      { label: "Envíos", href: "#" },
+      { label: "Devoluciones", href: "#" },
+      { label: "Cuidado de joyas", href: "#" },
+      { label: "Contacto", href: "#" },
+    ],
   },
   {
     title: "Aurelia",
-    links: ["Nuestra historia", "Sostenibilidad", "Taller", "Trabaja con nosotros"],
+    links: [
+      { label: "Nuestra historia", href: "/#historia" },
+      { label: "Sostenibilidad", href: "#" },
+      { label: "Taller", href: "#" },
+      { label: "Trabaja con nosotros", href: "#" },
+    ],
   },
 ];
 
@@ -45,10 +63,10 @@ export function Footer() {
               <h3 className="font-serif text-lg text-charcoal">{g.title}</h3>
               <ul className="mt-4 space-y-2.5 text-sm text-stone">
                 {g.links.map((l) => (
-                  <li key={l}>
-                    <a href="#" className="transition-colors hover:text-gold">
-                      {l}
-                    </a>
+                  <li key={l.label}>
+                    <Link href={l.href} className="transition-colors hover:text-gold">
+                      {l.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
