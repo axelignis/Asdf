@@ -1,4 +1,5 @@
-import { collections } from "@/data/products";
+import Link from "next/link";
+import { categories } from "@/data/products";
 
 export function Collections() {
   return (
@@ -14,11 +15,11 @@ export function Collections() {
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3">
-        {collections.map((c) => (
-          <a
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {categories.map((c) => (
+          <Link
             key={c.id}
-            href={`#${c.id}`}
+            href={`/productos?categoria=${c.id}`}
             className="group relative overflow-hidden rounded-3xl"
           >
             <div
@@ -36,7 +37,7 @@ export function Collections() {
                 </span>
               </span>
             </div>
-          </a>
+          </Link>
         ))}
       </div>
     </section>
