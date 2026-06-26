@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ivory: #faf7f2;
+  --color-cream: #f3ece1;
+  --color-charcoal: #1f1b16;
+  --color-stone: #6b6359;
+  --color-gold: #b08d57;
+  --color-gold-light: #d4b483;
+  --color-gold-dark: #8a6d3f;
+
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+}
+
+:root {
+  --background: #faf7f2;
+  --foreground: #1f1b16;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* Decorative shimmer used on the gradient photography placeholders. */
+.shimmer {
+  background-size: 200% 100%;
+  animation: shimmer 6s linear infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fade-up 0.9s ease-out both;
+}
+
+/* Subtle letter spacing helper for the luxury aesthetic. */
+.tracking-luxe {
+  letter-spacing: 0.28em;
+}
