@@ -126,9 +126,13 @@ export function CartDrawer() {
               <p className="mt-1 text-xs text-stone/70">
                 Envío e impuestos calculados al finalizar la compra.
               </p>
-              <button className="mt-5 w-full rounded-full bg-charcoal py-4 text-sm font-medium tracking-wide text-ivory transition-colors hover:bg-gold-dark">
+              <Link
+                href="/checkout"
+                onClick={close}
+                className="mt-5 block w-full rounded-full bg-charcoal py-4 text-center text-sm font-medium tracking-wide text-ivory transition-colors hover:bg-gold-dark"
+              >
                 Finalizar compra
-              </button>
+              </Link>
               <button
                 onClick={close}
                 className="mt-2 w-full py-2 text-sm text-stone transition-colors hover:text-charcoal"
